@@ -86,7 +86,7 @@ class XilicaSolaroInstance extends InstanceBase {
         }
     }
 
-    async getMuteState(channel) {
+    async getInputMuteState(channel) {
         return new Promise((resolve, reject) => {
             this.socket.send(`GET MUTE INPUT ${channel}\n`);
             this.socket.on('data', (data) => {
@@ -95,7 +95,7 @@ class XilicaSolaroInstance extends InstanceBase {
                 if (match) {
                     resolve(match[1]);
                 } else {
-                    reject(new Error('Failed to get mute state'));
+                    reject(new Error('Failed to get mute status'));
                 }
             });
         });

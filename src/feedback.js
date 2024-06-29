@@ -44,7 +44,7 @@ export function processFeedback(data, instance) {
 
 export function getFeedbacks(instance) {
     return {
-        mute_status: {
+        inputMuteStatus: {
             name: 'Mute Status',
             options: [
                 {
@@ -57,33 +57,12 @@ export function getFeedbacks(instance) {
             ],
             callback: async (feedback, context) => {
                 const channel = feedback.options.channel;
-                const muteState = await getMuteState(channel);
+                const muteState = await instance.getInputMuteState(channel);
                 return {
                     bgcolor: muteState ? '65280' : '255', // Green if muted, Blue otherwise
                 };
             },
         },
-        // muteStatus: {
-        //   type: 'boolean',
-        //   label: 'Mute Status',
-        //   description: 'Indicates if a specific channel is muted',
-        //   options: [
-        //     {
-        //       type: 'number',
-        //       label: 'Channel Number',
-        //       id: 'channel',
-        //       default: 1,
-        //       required: true,
-        //     },
-        //   ],
-        //   callback: (feedback) => {
-        //     const channel = feedback.options.channel;
-        //     const status = instance.getVariable(`mute_status_${channel}`);
-        //     return {
-        //       value: status === 'Muted',
-        //     };
-        //   },
-        // },
         volumeLevel: {
             type: 'number',
             label: 'Volume Level',
