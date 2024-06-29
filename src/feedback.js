@@ -107,8 +107,3 @@ export function getFeedbacks(instance) {
         },
     };
 }
-
-export async function getMuteState(channel) {
-    // Implement logic to get mute state for the given channel
-    return false; // Replace with actual mute state
-}

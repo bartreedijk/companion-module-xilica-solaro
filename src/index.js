@@ -86,6 +86,21 @@ class XilicaSolaroInstance extends InstanceBase {
         }
     }
 
+    async getMuteState(channel) {
+        return new Promise((resolve, reject) => {
+            this.socket.send(`GET MUTE INPUT ${channel}\n`);
+            this.socket.on('data', (data) => {
+                const message = data.toString().trim();
+                const match = message.match(new RegExp(`MUTE INPUT ${channel} (\\d+)`));
+                if (match) {
+                    resolve(match[1]);
+                } else {
+                    reject(new Error('Failed to get mute state'));
+                }
+            });
+        });
+    }
+
     static getUpgradeScripts() {
         return [];
     }
