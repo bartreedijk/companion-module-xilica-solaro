@@ -18,5 +18,22 @@ export function GetConfigFields() {
         default: 23,
         required: true,
     });
+
+    variables.push({
+        type: 'textinput',
+        id: 'inputChannels',
+        label: 'Feedback input channels (comma-separated)',
+        width: 12,
+        default: '1,2,3',
+    });
+
+    variables.push({
+        type: 'textinput',
+        id: 'outputChannels',
+        label: 'Feedback output channels (comma-separated)',
+        width: 12,
+        default: '1,2,3',
+    });
+
     return variables;
 }

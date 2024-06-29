@@ -44,12 +44,34 @@ class XilicaSolaroInstance extends InstanceBase {
 
         this.socket.on('connect', () => {
             this.log('info', 'Connected to Xilica Solaro');
+
+            this.subscribeToFeedback();
         });
 
         this.socket.on('data', (data) => {
             processFeedback(data, this);
         });
     }
+
+    // Subscribe to events from xilica solaro (volume change, etc.)
+    subscribeToFeedback() {
+        // Subscribe to input mute status feedback
+        if (this.config.inputChannels) {
+            const muteInputs = this.config.inputChannels.split(',').map(input => input.trim());
+            muteInputs.forEach(input => {
+                this.sendCommand(`SUBSCRIBE MUTE INPUT ${input}`);
+            });
+        }
+    
+        // Subscribe to output volume level feedback
+        if (this.config.outputChannels) {
+            const volumeOutputs = this.config.outputChannels.split(',').map(output => output.trim());
+            volumeOutputs.forEach(output => {
+                this.sendCommand(`SUBSCRIBE VOLUME OUTPUT ${output}`);
+            });
+        }
+    }
+    
 
     // Return config fields for web config
 	getConfigFields() {
@@ -58,7 +80,7 @@ class XilicaSolaroInstance extends InstanceBase {
 
     sendCommand(cmd) {
         if (this.socket && this.socket.isConnected) {
-            this.socket.send(cmd);
+            this.socket.send(cmd + '\n'); // Ensure each command ends with a newline
         } else {
             this.log('error', 'Cannot send command, socket not connected');
         }

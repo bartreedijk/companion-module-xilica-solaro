@@ -8,6 +8,16 @@ export function processFeedback(data, instance) {
         const channel = muteMatch[1];
         const status = muteMatch[2];
         instance.setVariable(`mute_status_${channel}`, status === '1' ? 'Muted' : 'Unmuted');
+        return; // Return after processing to avoid processing the same message twice
+    }
+
+    // Example parsing, assuming the feedback message format is "MUTE INPUT <channel> <status>"
+    const muteInputMatch = message.match(/MUTE INPUT (\d+) (\d+)/);
+    if (muteInputMatch) {
+        const channel = muteInputMatch[1];
+        const status = muteInputMatch[2];
+        instance.setVariable(`input_mute_status_${channel}`, status === '1' ? 'Muted' : 'Unmuted');
+        return; // Return after processing to avoid processing the same message twice
     }
 
     // Example parsing, assuming the feedback message format is "VOL <channel> <level>"
@@ -16,7 +26,20 @@ export function processFeedback(data, instance) {
         const channel = volumeMatch[1];
         const level = volumeMatch[2];
         instance.setVariable(`volume_level_${channel}`, level);
+        return; // Return after processing to avoid processing the same message twice
     }
+
+    // Example parsing, assuming the feedback message format is "VOLUME OUTPUT <channel> <level>"
+    const volumeOutputMatch = message.match(/VOLUME OUTPUT (\d+) (\d+)/);
+    if (volumeMatch) {
+        const channel = volumeOutputMatch[1];
+        const level = volumeOutputMatch[2];
+        instance.setVariable(`output_volume_level_${channel}`, level);
+        return; // Return after processing to avoid processing the same message twice
+    }
+
+    // Log unrecognized message format
+    instance.log('warn', `Unrecognized feedback message: ${message}`);
 }
 
 export function getFeedbacks(instance) {
